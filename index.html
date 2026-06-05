@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hooria Attas — AI & Automation Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --line: rgba(255,255,255,0.07);
+    --line2: rgba(255,255,255,0.12);
+    --text: #e8e6f0;
+    --muted: #7a7890;
+    --accent: #7c6dfa;
+    --accent2: #c084fc;
+    --teal: #2dd4bf;
+    --amber: #fbbf24;
+    --coral: #f97066;
+    --green: #4ade80;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── GRID LINES ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 600px; height: 600px; background: rgba(124,109,250,0.12); top: -200px; right: -100px; animation-delay: 0s; }
+  .orb2 { width: 400px; height: 400px; background: rgba(45,212,191,0.08); bottom: 100px; left: -100px; animation-delay: -6s; }
+  .orb3 { width: 300px; height: 300px; background: rgba(192,132,252,0.07); top: 50%; left: 40%; animation-delay: -12s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(30px, 20px) scale(1.05); }
+  }
+
+  /* ── LAYOUT ── */
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,15,0.7);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-weight: 800; font-size: 18px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 0 80px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,109,250,0.1);
+    border: 1px solid rgba(124,109,250,0.25);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  h1 .line2 { color: var(--accent); }
+  h1 .line3 {
+    background: linear-gradient(90deg, var(--teal), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-bio {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+  .hero-bio strong { color: var(--text); font-weight: 500; }
+  .hero-ctas {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500; font-size: 15px;
+    transition: all 0.2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: #6a5ce8; transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent;
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500; font-size: 15px;
+    border: 1px solid var(--line2);
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  /* HERO RIGHT: stats */
+  .hero-right { animation: fadeUp 0.6s ease 0.4s both; }
+  .stats-card {
+    background: var(--bg2);
+    border: 1px solid var(--line2);
+    border-radius: 16px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .stat { padding: 16px; background: var(--bg3); border-radius: 10px; }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 36px; font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); font-weight: 400; }
+  .stat:nth-child(1) .stat-num { color: var(--accent); }
+  .stat:nth-child(2) .stat-num { color: var(--teal); }
+  .stat:nth-child(3) .stat-num { color: var(--accent2); }
+  .stat:nth-child(4) .stat-num { color: var(--amber); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 100px 0; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 17px;
+    font-weight: 300;
+    max-width: 540px;
+    margin-bottom: 64px;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--line2);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(124,109,250,0.05) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(124,109,250,0.08) 0%, var(--bg2) 50%);
+    border-color: rgba(124,109,250,0.3);
+  }
+
+  .project-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .project-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tag-automation { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
+  .tag-vision     { background: rgba(124,109,250,0.1); color: var(--accent2); border: 1px solid rgba(124,109,250,0.2); }
+  .tag-ml         { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .tag-ai         { background: rgba(249,112,102,0.1); color: var(--coral); border: 1px solid rgba(249,112,102,0.2); }
+  .tag-data       { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+
+  .project-title {
+    font-family: var(--font-head);
+    font-size: 19px; font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  .project-desc {
+    color: var(--muted); font-size: 14px;
+    line-height: 1.65; font-weight: 300;
+    margin-bottom: 20px;
+  }
+  .project-stack {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .chip {
+    background: var(--bg3);
+    border: 1px solid var(--line2);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .project-arrow {
+    position: absolute; top: 28px; right: 28px;
+    color: var(--muted); font-size: 18px;
+    transition: all 0.2s;
+  }
+  .project-card:hover .project-arrow { color: var(--accent); transform: translate(3px, -3px); }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--bg2); }
+  .skills-outer {
+    border: 1px solid var(--line2);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .skills-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+  .skills-row:last-child { border-bottom: none; }
+  .skills-category {
+    padding: 28px 24px;
+    border-right: 1px solid var(--line);
+    font-size: 13px; font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex; align-items: center;
+    background: var(--bg3);
+  }
+  .skills-items {
+    padding: 24px 28px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .skill-pill {
+    background: var(--bg);
+    border: 1px solid var(--line2);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 14px; font-weight: 400;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .skill-pill.hot { border-color: rgba(124,109,250,0.4); color: var(--accent2); background: rgba(124,109,250,0.06); }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--muted); font-weight: 300; font-size: 16px;
+    margin-bottom: 20px; line-height: 1.8;
+  }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .about-links { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 0;
+    width: 1px; background: var(--line2);
+  }
+  .tl-item { position: relative; padding: 0 0 32px 28px; }
+  .tl-item::before {
+    content: '';
+    position: absolute; left: -5px; top: 8px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-year { font-size: 12px; color: var(--accent); font-weight: 500; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .tl-title { font-family: var(--font-head); font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .tl-sub { font-size: 14px; color: var(--muted); font-weight: 300; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--bg2);
+    text-align: center;
+  }
+  .contact-card {
+    background: var(--bg3);
+    border: 1px solid var(--line2);
+    border-radius: 24px;
+    padding: 72px 48px;
+    position: relative;
+    overflow: hidden;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 400px; height: 300px;
+    background: radial-gradient(ellipse, rgba(124,109,250,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .contact-card h2 { margin-bottom: 16px; }
+  .contact-card p { color: var(--muted); font-weight: 300; margin-bottom: 36px; font-size: 17px; }
+  .contact-email {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--bg);
+    border: 1px solid var(--line2);
+    border-radius: 10px;
+    padding: 14px 24px;
+    margin-bottom: 32px;
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .contact-email span { color: var(--text); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0;
+    position: relative; z-index: 1;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .skills-row { grid-template-columns: 1fr; }
+    .skills-category { border-right: none; border-bottom: 1px solid var(--line); padding: 16px 24px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Hooria<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary" style="padding:8px 18px;font-size:13px;">Hire me</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag">Available for work</div>
+        <h1>
+          AI Engineer<br>
+          <span class="line2">&amp; Automation</span><br>
+          <span class="line3">Specialist.</span>
+        </h1>
+        <p class="hero-bio">
+          I build <strong>AI systems and intelligent automations</strong> that solve real business problems — from training custom computer vision models on thermal + RGB data, to designing fully automated n8n workflows that connect ClickUp, Sheets, Slack, and OpenAI into seamless pipelines.
+        </p>
+        <div class="hero-ctas">
+          <a href="#projects" class="btn-primary">View my work →</a>
+          <a href="https://github.com/HOORIAGABA" target="_blank" class="btn-outline">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/hooria-attas/" target="_blank" class="btn-outline">LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="stats-card">
+          <div class="stat">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">n8n workflows built</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">26</div>
+            <div class="stat-label">GitHub repositories</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">5+</div>
+            <div class="stat-label">AI/ML projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">3+</div>
+            <div class="stat-label">API integrations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Work</div>
+      <h2>Selected Projects</h2>
+      <p class="section-sub">Real systems built for real problems — automation pipelines, AI models, and intelligent data tools.</p>
+    </div>
+    <div class="projects-grid reveal">
+
+      <!-- Featured: n8n ClickUp -->
+      <a href="https://github.com/HOORIAGABA/n8n-clickup-inprogress-tracker" target="_blank" class="project-card featured">
+        <span class="project-arrow">↗</span>
+        <div class="project-icon" style="background:rgba(45,212,191,0.1);">⚙️</div>
+        <span class="project-tag tag-automation">Automation</span>
+        <div class="project-title">ClickUp → Google Sheets Auto-Tracker</div>
+        <div class="project-desc">Fully automated daily workflow using n8n that fetches in-progress ClickUp tasks, deduplicates by member + date uniqueness, intelligently updates changed task details, and logs results to Google Sheets. Supports multiple teams with zero manual work.</div>
+        <div class="project-stack">
+          <span class="chip">n8n</span>
+          <span class="chip">ClickUp API</span>
+          <span class="chip">Google Sheets</span>
+          <span class="chip">Slack</span>
+          <span class="chip">REST APIs</span>
+          <span class="chip">Webhooks</span>
+        </div>
+      </a>
+
+      <!-- YOLO11 -->
+      <a href="https://github.com/HOORIAGABA" target="_blank" class="project-card">
+        <span class="project-arrow">↗</span>
+        <div class="project-icon" style="background:rgba(124,109,250,0.1);">👁️</div>
+        <span class="project-tag tag-vision">Computer Vision</span>
+        <div class="project-title">Multispectral YOLO11 Detection</div>
+        <div class="project-desc">Modified YOLO11 architecture to accept RGBT (RGB + Thermal) dual-input images. Transformed internal layers for multispectral fusion and adapted the detection head for 2-class output — enabling object detection in low-light and night conditions.</div>
+        <div class="project-stack">
+          <span class="chip">YOLO11</span>
+          <span class="chip">PyTorch</span>
+          <span class="chip">Thermal Imaging</span>
+          <span class="chip">Python</span>
+        </div>
+      </a>
+
+      <!-- OpenAI Chatbot -->
+      <a href="https://github.com/HOORIAGABA" target="_blank" class="project-card">
+        <span class="project-arrow">↗</span>
+        <div class="project-icon" style="background:rgba(249,112,102,0.1);">🤖</div>
+        <span class="project-tag tag-ai">AI / OpenAI</span>
+        <div class="project-title">Customer Support Chatbot</div>
+        <div class="project-desc">Built a conversational AI chatbot using the OpenAI API to automate customer support and FAQ answering — reducing repetitive queries and enabling instant, accurate responses at scale.</div>
+        <div class="project-stack">
+          <span class="chip">OpenAI API</span>
+          <span class="chip">Python</span>
+          <span class="chip">Chatbot</span>
+        </div>
+      </a>
+
+      <!-- Customer Behavior Profiling -->
+      <a href="https://github.com/HOORIAGABA/Customer-Behavior-Profiling" target="_blank" class="project-card">
+        <span class="project-arrow">↗</span>
+        <div class="project-icon" style="background:rgba(251,191,36,0.1);">🔍</div>
+        <span class="project-tag tag-ml">ML / Fraud Detection</span>
+        <div class="project-title">Customer Behavior Profiling</div>
+        <div class="project-desc">ML system that creates detailed customer behavior profiles to identify anomalies and flag potential fraud before it happens. Uses unsupervised and supervised learning to detect deviations from normal patterns.</div>
+        <div class="project-stack">
+          <span class="chip">Python</span>
+          <span class="chip">Scikit-learn</span>
+          <span class="chip">Anomaly Detection</span>
+          <span class="chip">Jupyter</span>
+        </div>
+      </a>
+
+      <!-- Speech Emotion -->
+      <a href="https://github.com/HOORIAGABA/Speech-Emotion-Recognition" target="_blank" class="project-card">
+        <span class="project-arrow">↗</span>
+        <div class="project-icon" style="background:rgba(74,222,128,0.1);">🎙️</div>
+        <span class="project-tag tag-data">Deep Learning</span>
+        <div class="project-title">Speech Emotion Recognition</div>
+        <div class="project-desc">Audio processing pipeline for real-time emotion classification from speech. Covers feature extraction (MFCCs, spectrograms) and ML model training — a foundation for voice-driven affective computing applications.</div>
+        <div class="project-stack">
+          <span class="chip">Python</span>
+          <span class="chip">Librosa</span>
+          <span class="chip">Deep Learning</span>
+          <span class="chip">Audio AI</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Capabilities</div>
+      <h2>Skills &amp; Tools</h2>
+      <p class="section-sub">End-to-end across AI research, automation engineering, and full-stack data pipelines.</p>
+    </div>
+    <div class="skills-outer reveal">
+      <div class="skills-row">
+        <div class="skills-category">Automation</div>
+        <div class="skills-items">
+          <span class="skill-pill hot">n8n</span>
+          <span class="skill-pill hot">ClickUp API</span>
+          <span class="skill-pill hot">Webhooks</span>
+          <span class="skill-pill">REST APIs</span>
+          <span class="skill-pill">Google Sheets API</span>
+          <span class="skill-pill">Slack API</span>
+          <span class="skill-pill">Workflow Design</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <div class="skills-category">AI / ML</div>
+        <div class="skills-items">
+          <span class="skill-pill hot">OpenAI API</span>
+          <span class="skill-pill hot">YOLO11</span>
+          <span class="skill-pill hot">Computer Vision</span>
+          <span class="skill-pill">PyTorch</span>
+          <span class="skill-pill">Scikit-learn</span>
+          <span class="skill-pill">Anomaly Detection</span>
+          <span class="skill-pill">NLP</span>
+          <span class="skill-pill">Audio ML</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <div class="skills-category">Languages</div>
+        <div class="skills-items">
+          <span class="skill-pill hot">Python</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">HTML / CSS</span>
+          <span class="skill-pill">React</span>
+          <span class="skill-pill">SQL</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <div class="skills-category">Data</div>
+        <div class="skills-items">
+          <span class="skill-pill">Pandas</span>
+          <span class="skill-pill">NumPy</span>
+          <span class="skill-pill">Jupyter</span>
+          <span class="skill-pill">Data Analysis</span>
+          <span class="skill-pill">EDA</span>
+          <span class="skill-pill">Visualization</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <div class="section-label">About</div>
+        <h2>Who I am</h2>
+        <p>I'm <strong>Hooria Attas</strong>, an AI and automation engineer passionate about building systems that actually work in the real world — not just in notebooks.</p>
+        <p>My work spans two areas: <strong>AI/ML engineering</strong> (custom computer vision models, fraud detection, speech AI) and <strong>business automation</strong> (n8n workflows that connect the tools teams already use and eliminate repetitive work).</p>
+        <p>I believe the most valuable AI isn't the most complex — it's the one that solves a specific problem reliably, every day, without anyone having to think about it.</p>
+        <div class="about-links">
+          <a href="https://github.com/HOORIAGABA" target="_blank" class="btn-outline">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/hooria-attas/" target="_blank" class="btn-outline">LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">2024 – Present</div>
+          <div class="tl-title">AI & Automation Engineer</div>
+          <div class="tl-sub">Building n8n workflows, OpenAI integrations, and computer vision systems</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2024</div>
+          <div class="tl-title">Multispectral YOLO11 Research</div>
+          <div class="tl-sub">Modified YOLO11 for RGBT dual-input thermal + RGB object detection</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2023 – 2024</div>
+          <div class="tl-title">ML Projects</div>
+          <div class="tl-sub">Fraud detection, speech emotion recognition, data analysis systems</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2022</div>
+          <div class="tl-title">Computer Science — BS</div>
+          <div class="tl-sub">Python, web development, databases, algorithms</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <h2>Let's build something.</h2>
+      <p>Open to freelance projects, automation contracts, and full-time AI/ML roles.<br>If you have a problem, I probably have a workflow for it.</p>
+      <div class="contact-email">
+        📧 <span>hooria.attas@gmail.com</span>
+      </div>
+      <br>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:hooria.attas@gmail.com" class="btn-primary">Send me an email →</a>
+        <a href="https://www.linkedin.com/in/hooria-attas/" target="_blank" class="btn-outline">Connect on LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span>© 2026 Hooria Attas</span>
+    <div class="footer-links">
+      <a href="https://github.com/HOORIAGABA" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/hooria-attas/" target="_blank">LinkedIn</a>
+      <a href="mailto:hooria.attas@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
